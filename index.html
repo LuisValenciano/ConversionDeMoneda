@@ -13,11 +13,12 @@
         <select name="comboCurrencies" id="comboCurrencies1">
         </select>
         <label for="amountLabel">Amount</label>
-        <input type="Amount">
+        <input id="inputCurrency" type="number" value=0 min="0" oninput="validity.valid||(value='');">
         <label for="equals"> = </label>
-        <input type="result" readonly>
+        <input id="resultCurrency" type="number" min="0" oninput="validity.valid||(value='');" readonly>
         <select name="comboCurrencies" id="comboCurrencies2">
         </select>
     </div>
 </body>
-</html>
+<script src="/server/currencies.js"></script>
+</html>                                                                           

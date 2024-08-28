@@ -1,5 +1,6 @@
 const currencyAPIKEY = 'e99379912231947fc0ecc8de6ddb031f'
 const consultaLink = 'http://api.exchangeratesapi.io/v1/latest?access_key=e99379912231947fc0ecc8de6ddb031f'
+let rates = {}
 
 const consultaPais = 'https://restcountries.com/v3.1/currency/'
 
@@ -13,10 +14,11 @@ function cargarMonedas() {
             return response.json();
         })
         .then(data => {
-            const currencies = Object.keys(data.rates);
-            const combo1 = document.getElementById('comboCurrencies1');
-            const combo2 = document.getElementById('comboCurrencies2');
-            const options = [];
+            rates = data.rates
+            let currencies = Object.keys(data.rates);
+            let combo1 = document.getElementById('comboCurrencies1');
+            let combo2 = document.getElementById('comboCurrencies2');
+            let opciones = [];
 
             const fetchPromises = currencies.map(currency => {
                 return fetch(`${consultaPais}${currency}`)
@@ -27,8 +29,8 @@ function cargarMonedas() {
                         return response.json();
                     })
                     .then(countryData => {
-                        const currencyName = countryData[0]?.currencies?.[currency]?.name || 'Nombre Desconocido';
-                        options.push({
+                        let currencyName = countryData[0]?.currencies?.[currency]?.name || 'Nombre Desconocido';
+                        opciones.push({
                             code: currency,
                             name: currencyName
                         });
@@ -39,9 +41,9 @@ function cargarMonedas() {
             });
 
             Promise.all(fetchPromises).then(() => {
-                options.sort((a, b) => a.name.localeCompare(b.name));
+                opciones.sort((a, b) => a.name.localeCompare(b.name));
 
-                options.forEach(option => {
+                opciones.forEach(option => {
                     let optionElement1 = document.createElement('option');
                     optionElement1.value = option.code;
                     optionElement1.text = `${option.code} - ${option.name}`;
@@ -58,5 +60,24 @@ function cargarMonedas() {
             console.error('Hubo un problema con la solicitud:', error);
         });
 }
+
+function hacerConversion(){
+    let currency1 = document.getElementById('comboCurrencies1').value;
+    let currency2 = document.getElementById('comboCurrencies2').value;
+    let monto = document.getElementById('inputCurrency').value;
+
+    if (rates[currency1] && rates[currency2]){
+        let montoEnEuros = monto / rates[currency1];
+        let montoFinal = montoEnEuros * rates[currency2];
+
+        document.getElementById('resultCurrency').value = montoFinal.toFixed(2);
+    }else{
+        alert('Una o ambas monedas no tienen una tasa de cambio disponible');
+    }
+}
+
+document.getElementById('comboCurrencies1').addEventListener('change', hacerConversion)
+document.getElementById('comboCurrencies2').addEventListener('change', hacerConversion)
+document.getElementById('inputCurrency').addEventListener('input', hacerConversion)
 
 cargarMonedas();

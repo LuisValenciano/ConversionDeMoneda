@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Currency conversion</title>
+    <link rel="stylesheet" href="/styles/index.css">
+</head>
+<body>
+    <h1 id="titulo"> Currency conversion control</h1><br>
+    <div id="itemsContainer">
+        <label for="baseCurrencyLabel">Your Currency:</label>
+        <select name="comboCurrencies" id="comboCurrencies1">
+        </select>
+        <label for="amountLabel">Amount</label>
+        <input id="inputCurrency" type="number" min="0" oninput="validity.valid||(value='');">
+        <label for="equals"> = </label>
+        <input id="resultCurrency" type="number" min="0" oninput="validity.valid||(value='');" readonly>
+        <select name="comboCurrencies" id="comboCurrencies2">
+        </select>
+    </div>
+</body>
+<script src="/server/currencies.js"></script>
+</html>                                                                           
